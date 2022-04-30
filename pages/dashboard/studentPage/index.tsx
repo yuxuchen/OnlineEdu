@@ -1,6 +1,7 @@
 import { Table, Space, Button, Popconfirm, message } from 'antd'
 import React, {useState} from 'react';
 import { useEffect } from 'react';
+import {formatDistanceToNow} from 'date-fns';
 import DLayout from '../../LayoutDB';
 import {getStudentList, deleteStudent} from '../../../api/studentListApi'
 
@@ -14,9 +15,9 @@ export default function StudentList(){
     
      useEffect(() => {
         getStudentList(1).then(function(res){
-            console.log(data);
-            setData(res.data.students);
-            setTotalPages(res.data.total);
+            console.log(res.data.data.students);
+            setData(res.data.data.students);
+            setTotalPages(res.data.data.total);
             })
         }
      ,[]);   
@@ -24,16 +25,16 @@ export default function StudentList(){
     
     function pageChange(page: number){
         getStudentList(page).then(function(res){
-            setData(res.data.students);
-            setTotalPages(res.data.total);
+            setData(res.data.data.students);
+            setTotalPages(res.data.data.total);
         })
     }
 
     function confirmDelete(item: any){
         deleteStudent(item.id);
         getStudentList(currentPage).then(function(res){
-            setData(res.data.students);
-            setTotalPages(res.data.total);
+            setData(res.data.data.students);
+            setTotalPages(res.data.data.total);
         });
         message.success('Deleted');
     }
@@ -41,8 +42,8 @@ export default function StudentList(){
     const columns =[
         {
             title:'No.',
-            dataIndex: 'no',
-            key: 'no',
+            dataIndex: 'id',
+            key: 'id',
         },
         {
             title:'Name',
@@ -52,7 +53,7 @@ export default function StudentList(){
         },
         {
             title:'Area',
-            dataIndex: 'area',
+            dataIndex: 'country',
             key: 'area',
         },
         {
@@ -61,19 +62,32 @@ export default function StudentList(){
             key: 'email',
         },
         {
-            title:'SelectedCurriculum',
-            dataIndex: 'selectedCurriculum',
-            key: 'selectedCurriculum',
+            title:'Selected Curriculum',
+            dataIndex: 'courses',
+            key:'courses',
+            render:(courses:any) => 
+            (
+            <span>
+                {courses.map((course:any) => 
+                {return <div key={course.name}>{course.name}</div>})}
+            </span>
+            )
         },
         {
-            title:'StudentType',
-            dataIndex: 'studentType',
-            key: 'student type',
+            title:'Student Type',
+            dataIndex: 'type',
+            key:'studentType',
+            render: (type:any) => <div>{type?.name}</div>
         },
         {
-            title:'JoinTime',
-            dataIndex: 'joinTime',
-            key: 'joinTime',
+            title:'Join Time',
+            dataIndex: 'createdAt',
+            key:'createdAt',
+            render: (createdAt:any) =>{
+                const date = Date.parse(createdAt);
+                const res = formatDistanceToNow(date,{addSuffix: true});
+                return <div>{res}</div>
+            }
         },
         {
             title:'Action',
@@ -108,7 +122,7 @@ export default function StudentList(){
         rowKey={'key'}
         dataSource={data}
         pagination={
-            {pageSize:10,
+            {pageSize:12,
             total: totalPages,
             onChange: (page) => {
                 pageChange(page);

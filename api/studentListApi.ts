@@ -1,23 +1,20 @@
-import axiosInstance from '../services/apiServices'
+import axiosInstanceConfig from '../services/apiServicesConfig'
 
 export const getStudentList = (page: number) => {
-    return axiosInstance({
-        url: `/student?page=${page}&limit=10`,
-        params: {
-            page: page
-        }
+    return axiosInstanceConfig({
+        url: `/students?page=${page}&limit=150`,
 })
 }
 
 export const deleteStudent = (id: number) => {
-    return axiosInstance({
+    return axiosInstanceConfig({
         url: `/students/${id}`,
         params:{Id: id}
     })
 }
 
 export const addStudent =(name: string, country: string, email: string, type: number) => {
-    return axiosInstance({
+    return axiosInstanceConfig({
         url:'/students',
         params: {
             name:name,

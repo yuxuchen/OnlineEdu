@@ -13,26 +13,27 @@ const getBaseUrl = () => {
 
 const baseURL = getBaseUrl();
 
-const axiosInstance = axios.create({
+
+const axiosInstanceConfig = axios.create({
     baseURL,
+    headers:{ Authorization: "Bearer " + getToken(),},
     withCredentials: true,
-    
 });
 
-axiosInstance.interceptors.request.use(
-        config => {
-          const user = getToken();
-                if(user){
-                config.headers = {
-                        Authentication: user
-                }
-                }
-        return config
-        },
-        error => {
-                return Promise.reject(error)
-        }
-)
+// axiosInstanceConfig.interceptors.request.use(
+//         config => {
+//           const user = getToken('token');
+//                 if(user){
+//                 config.headers = {
+//                         Authentication: user
+//                 }
+//                 }
+//         return config
+//         },
+//         error => {
+//                 return Promise.reject(error)
+//         }
+// )
 
 // axiosInstance.interceptors.response.use(
 //         res =>{
@@ -46,4 +47,4 @@ axiosInstance.interceptors.request.use(
 //         }
 // )
 
-export default axiosInstance;
+export default axiosInstanceConfig;
