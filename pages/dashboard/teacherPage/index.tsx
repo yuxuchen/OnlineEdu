@@ -1,11 +1,11 @@
-import { Table, Space, Button, Popconfirm, message, Modal, Form, Select, Input } from 'antd'
+import { Table, Space, Button, Popconfirm, message, Modal, Form, Select, Input, Search } from 'antd'
 import React, {useState} from 'react';
 import { useEffect } from 'react';
 import {formatDistanceToNow, fromUnixTime} from 'date-fns';
 import DLayout from '../../LayoutDB';
-import {getStudentList, deleteStudent, addStudent, editStudent} from '../../../api/studentListApi'
+import {getTeacherList, deleteTeacher, addTeacher, editTeacher} from '../../../api/teacherListApi'
 
-export default function StudentList(){
+export default function TeacherList(){
     
     const [data, setData]= useState([]);
     const [totalPages, setTotalPages] = useState(15);
@@ -14,23 +14,24 @@ export default function StudentList(){
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [form] = Form.useForm();
     const {Search} = Input;
+    const onSearch = value => console.log(value);
     
      useEffect(() => {
-        getStudentList(1).then(function(res){
-            console.log(res.data.data.students);
-            setData(res.data.data.students);
+        getTeacherList(1).then(function(res){
+            console.log(res.data.data.teachers);
+            setData(res.data.data.teachers);
             setTotalPages(res.data.data.total);
             })
         }
      ,[]);   
-    const onSearch = value => console.log(value);
+    
     const showAddModal = () =>{
         setAddModalVisible(true);
     }
     const handleAddOk = ()=>{
         setAddModalVisible(false);
         form.validateFields().then((values:any)=>{
-            addStudentItem(values)
+            addTeacherItem(values)
             console.log(values)
         }).catch((err)=>{
             console.log(err);
@@ -43,7 +44,7 @@ export default function StudentList(){
     const handleEditOk = ()=>{
         setEditModalVisible(false);
         form.validateFields().then((values:any)=>{
-            editStudentItem(values)
+            editTeacherItem(values)
             console.log(values)
         }).catch((err)=>{
             console.log(err);
@@ -65,34 +66,34 @@ export default function StudentList(){
     };
 
     function pageChange(page: number){
-        getStudentList(page).then(function(res){
-            setData(res.data.data.students);
+        getTeacherList(page).then(function(res){
+            setData(res.data.data.teachers);
             setTotalPages(res.data.data.total);
         })
     }
 
     function confirmDelete(item: any){
-        deleteStudent(item.id);
-        getStudentList(currentPage).then(function(res){
-            setData(res.data.data.students);
+        deleteTeacher(item.id);
+        getTeacherList(currentPage).then(function(res){
+            setData(res.data.data.teachers);
             setTotalPages(res.data.data.total);
         });
         message.success('Deleted');
     }
     
-    function editStudentItem(item: any){
-        console.log(item.name, item.country, item.email, item.studentType)
-        editStudent(item.name, item.country, item.email, item.studentType);
-        getStudentList(currentPage).then(function(res){
-            setData(res.data.data.students);
+    function editTeacherItem(item: any){
+        console.log(item.name, item.country, item.phone, item.skills, item.email)
+        editTeacher(item.name, item.country, item.phone, item.skills, item.email);
+        getTeacherList(currentPage).then(function(res){
+            setData(res.data.data.teachers);
         });
         message.success('edit');
     }
-    function addStudentItem(item: any){
-        console.log(item.name, item.country, item.email, item.studentType)
-        addStudent(item.name, item.country, item.email, item.studentType);
-        getStudentList(currentPage).then(function(res){
-            setData(res.data.data.students);
+    function addTeacherItem(item: any){
+        console.log(item.name, item.country, item.phone, item.skills, item.email)
+        addTeacher(item.name, item.country, item.phone, item.skills, item.email);
+        getTeacherList(currentPage).then(function(res){
+            setData(res.data.data.teachers);
             setTotalPages(res.data.data.total);
         });
         message.success('Added');
@@ -121,32 +122,26 @@ export default function StudentList(){
             key: 'email',
         },
         {
-            title:'Selected Curriculum',
-            dataIndex: 'courses',
-            key:'courses',
-            render:(courses:any) => 
+            title:'Skill',
+            dataIndex: 'skills',
+            key:'skills',
+            render:(skills:any) => 
             (
             <span>
-                {courses.map((course:any) => 
-                {return <div key={course.name}>{course.name}</div>})}
+                {skills.map((skill:any) => 
+                {return <div key={skill.name}>{skill.name}</div>})}
             </span>
             )
         },
         {
-            title:'Student Type',
-            dataIndex: 'type',
-            key:'studentType',
-            render: (type:any) => <div>{type?.name}</div>
+            title:'Course Amount',
+            dataIndex: 'courseAmount',
+            key:'courseAmount',
         },
         {
-            title:'Join Time',
-            dataIndex: 'createdAt',
-            key:'createdAt',
-            render: (createdAt:any) =>{
-                const date = Date.parse(createdAt);
-                const res = formatDistanceToNow(date,{addSuffix: true});
-                return <div>{res}</div>
-            }
+            title:'Phone',
+            dataIndex: 'phone',
+            key:'phone',
         },
         {
             title:'Action',
@@ -218,7 +213,7 @@ export default function StudentList(){
             </Form.Item>
         </Form>
             </Modal>
-            <Modal title='Edit student' 
+            <Modal title='Edit teacher' 
                   visible={editModalVisible} 
                   onCancel={handleEditCancel}
                   onOk={handleEditOk} 

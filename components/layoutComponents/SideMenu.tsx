@@ -31,12 +31,12 @@ export default function SideMenu() {
           </Menu.Item>
         <SubMenu key='/dashboard/studentPage' icon={<UserOutlined />} title='Student'>
             <Menu.Item key='2' icon={<TeamOutlined />}>
-              Student List
+            <Link href={{pathname:"../dashboard/studentPage"}}>Student List</Link>
             </Menu.Item>
         </SubMenu>
         <SubMenu key='/dashboard/teacherPage' icon={<DeploymentUnitOutlined />} title='Teacher'>
           <Menu.Item key='3' icon={<TeamOutlined />}>
-            <Link href={{pathname:"../teacherPage"}}>Teacher List</Link>
+          <Link href={{pathname:"../dashboard/teacherPage"}}>Teacher List</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu key='/dashboard/coursePage' icon={<ReadOutlined />} title='Course'>
