@@ -2,7 +2,7 @@ import React, {ReactNode} from 'react'
 import Link from 'next/link';
 import SideMenu from '../../components/layoutComponents/SideMenu'
 import TopHeader from '../../components/layoutComponents/TopHeader';
-import { Layout, Breadcrumb } from 'antd';
+import { Layout, Breadcrumb, AutoComplete } from 'antd';
 import StudentList from '../dashboard/studentPage';
 
 
@@ -29,6 +29,7 @@ export default function DLayout({ children }: { children?: ReactNode }){
             padding: 24,
             margin: 0,
             minHeight: 280,
+            overflow:"auto",
           }}>
               <main>{children}</main>
           </Content>

@@ -23,7 +23,7 @@ export default function TopHeader() {
         <Menu>
             <Menu.Item>manager</Menu.Item>
             <Menu.Item>student</Menu.Item>
-         <Menu.Item danger>a danger item</Menu.Item>
+         <Menu.Item danger>logout</Menu.Item>
         </Menu>
       );
 

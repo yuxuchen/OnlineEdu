@@ -2,25 +2,49 @@ import axiosInstanceConfig from '../services/apiServicesConfig'
 
 export const getStudentList = (page: number) => {
     return axiosInstanceConfig({
-        url: `/students?page=${page}&limit=150`,
+        url: `/students?page=${page}&limit=10`,
 })
 }
 
 export const deleteStudent = (id: number) => {
     return axiosInstanceConfig({
         url: `/students/${id}`,
-        params:{Id: id}
+        params:{Id: id},
+        method:'delete'
     })
 }
 
-export const addStudent =(name: string, country: string, email: string, type: number) => {
+export const getStudent = (id: number) => {
+    return axiosInstanceConfig({
+        url: `/students/${id}`,
+        params:{Id: id},
+        method:'get'
+    })
+}
+
+export const addStudent =(name: string, country: string, email: string, studentType: number) => {
     return axiosInstanceConfig({
         url:'/students',
-        params: {
+        method:'post',
+        data:{
+            name: name,
+            country: country,
+            email: email,
+            type: studentType
+        },
+        
+    })
+}
+
+export const editStudent =(name: string, country: string, email: string, type: number) => {
+    return axiosInstanceConfig({
+        url:'/students',
+        data: {
             name:name,
             country: country,
             email: email,
             type: type
-        }
+        },
+        method:'post'
     })
 }

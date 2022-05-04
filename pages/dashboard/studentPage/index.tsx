@@ -1,17 +1,19 @@
-import { Table, Space, Button, Popconfirm, message } from 'antd'
+import { Table, Space, Button, Popconfirm, message, Modal, Form, Select, Input } from 'antd'
 import React, {useState} from 'react';
+import StudentForm from '../../../components/formComponents/StudentForm';
 import { useEffect } from 'react';
-import {formatDistanceToNow} from 'date-fns';
+import {formatDistanceToNow, fromUnixTime} from 'date-fns';
 import DLayout from '../../LayoutDB';
-import {getStudentList, deleteStudent} from '../../../api/studentListApi'
+import {getStudentList, deleteStudent, addStudent, editStudent} from '../../../api/studentListApi'
 
 export default function StudentList(){
     
     const [data, setData]= useState([]);
     const [totalPages, setTotalPages] = useState(15);
     const [currentPage, setCurrentPage] = useState(1);
-    const [visibleOfAddStu, setVisibleOfAddStu] = useState(false);
-    const [visibleOfEditStu, setVisibleOfEditStu] = useState(false);
+    const [addModalVisible, setAddModalVisible] = useState(false);
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [form] = Form.useForm();
     
      useEffect(() => {
         getStudentList(1).then(function(res){
@@ -22,7 +24,46 @@ export default function StudentList(){
         }
      ,[]);   
     
+    const showAddModal = () =>{
+        setAddModalVisible(true);
+    }
+    const handleAddOk = ()=>{
+        setAddModalVisible(false);
+        form.validateFields().then((values:any)=>{
+            addStudentItem(values)
+            console.log(values)
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }
+    const handleAddCancel = ()=>{
+        setAddModalVisible(false);
+
+    }
+    const handleEditOk = ()=>{
+        setEditModalVisible(false);
+        form.validateFields().then((values:any)=>{
+            editStudentItem(values)
+            console.log(values)
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }
+    const handleEditCancel = ()=>{
+        setEditModalVisible(false);
+    }
+
+    const {Option} = Select;
+
+    const onFinish = async (values: any) => {
+        console.log('Success:', values.name);
+      };
     
+    const layout = {
+        labelCol: {span: 8},
+        wrapperCol: {span: 16},
+    };
+
     function pageChange(page: number){
         getStudentList(page).then(function(res){
             setData(res.data.data.students);
@@ -37,6 +78,24 @@ export default function StudentList(){
             setTotalPages(res.data.data.total);
         });
         message.success('Deleted');
+    }
+    
+    function editStudentItem(item: any){
+        console.log(item.name, item.country, item.email, item.studentType)
+        editStudent(item.name, item.country, item.email, item.studentType);
+        getStudentList(currentPage).then(function(res){
+            setData(res.data.data.students);
+        });
+        message.success('edit');
+    }
+    function addStudentItem(item: any){
+        console.log(item.name, item.country, item.email, item.studentType)
+        addStudent(item.name, item.country, item.email, item.studentType);
+        getStudentList(currentPage).then(function(res){
+            setData(res.data.data.students);
+            setTotalPages(res.data.data.total);
+        });
+        message.success('Added');
     }
 
     const columns =[
@@ -93,36 +152,108 @@ export default function StudentList(){
             title:'Action',
             key: 'action',
             render: (item: any) =>(
+               
                 <Space size = 'middle'> 
                   <Button 
                   type='link'
                   onClick = {() => {
-                      setVisibleOfEditStu(true)
+                      setEditModalVisible(true)
                   }}>
                       Edit
                   </Button>
-
+                  
                   <Popconfirm 
                     title='Are you sure to delete?'
                     onConfirm={() => {
-                    deleteStudent(item);
+                    confirmDelete(item);
                 }}
                 >
                     <Button type='primary' danger>Delete</Button>
                   </Popconfirm>
                 </Space>
+                
             )
         },
     ]
     
     return (
           <DLayout>
+            <Button type='primary' onClick={showAddModal}>
+                + Add
+            </Button>
+            <Modal forceRender
+            title='Add student'
+            getContainer={false} 
+            visible={addModalVisible} 
+            onOk={handleAddOk} 
+            okText='Add'
+            onCancel={handleAddCancel}
+            >
+            <Form {...layout} 
+            form = {form} 
+            name = 'control-hooks' 
+            onFinish={onFinish}
+        >
+            <Form.Item name='name' label='Name' rules = {[{required: true}]}>
+                <Input/>
+            </Form.Item>
+            <Form.Item name='email' label='Email' rules = {[{required: true}]}>
+                <Input/>
+            </Form.Item>
+            <Form.Item name='country' label='Area' rules = {[{required: true}]}>
+                <Select>
+                    <Option value="China">China</Option>
+                    <Option value='Australia'>Australia</Option>
+                    <Option value='America'>America</Option>
+                </Select>
+            </Form.Item>
+            <Form.Item name='studentType' label='Student Type' rules = {[{required: true}]}>
+                <Select>
+                    <Option value='1'>developer</Option>
+                    <Option value='2'>tester</Option>
+                </Select>
+            </Form.Item>
+        </Form>
+            </Modal>
+            <Modal title='Edit student' 
+                  visible={editModalVisible} 
+                  onCancel={handleEditCancel}
+                  onOk={handleEditOk} 
+                  okText='Update'
+                  mask={false}
+                  >
+                <Form {...layout} 
+            form = {form} 
+            name = 'control-hooks' 
+            onFinish={onFinish}
+        >
+            <Form.Item name='name' label='Name' rules = {[{required: true}]}>
+                <Input/>
+            </Form.Item>
+            <Form.Item name='email' label='Email' rules = {[{required: true}]}>
+                <Input/>
+            </Form.Item>
+            <Form.Item name='country' label='Area' rules = {[{required: true}]}>
+                <Select>
+                    <Option value="China">China</Option>
+                    <Option value='Australia'>Australia</Option>
+                    <Option value='America'>America</Option>
+                </Select>
+            </Form.Item>
+            <Form.Item name='studentType' label='Student Type' rules = {[{required: true}]}>
+                <Select>
+                    <Option value='1'>developer</Option>
+                    <Option value='2'>tester</Option>
+                </Select>
+            </Form.Item>
+        </Form>
+            </Modal>
            <Table 
         columns={columns} 
         rowKey={'key'}
         dataSource={data}
         pagination={
-            {pageSize:12,
+            {pageSize:10,
             total: totalPages,
             onChange: (page) => {
                 pageChange(page);
@@ -132,5 +263,4 @@ export default function StudentList(){
         />
        </DLayout>
     )
-
 }
