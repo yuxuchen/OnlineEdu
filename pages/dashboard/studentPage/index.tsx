@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import {formatDistanceToNow, fromUnixTime} from 'date-fns';
 import DLayout from '../../LayoutDB';
 import {getStudentList, deleteStudent, addStudent, editStudent} from '../../../api/studentListApi'
+import Link from 'next/link';
 
 export default function StudentList(){
     
@@ -14,6 +15,7 @@ export default function StudentList(){
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [form] = Form.useForm();
     const {Search} = Input;
+
     
      useEffect(() => {
         getStudentList(1).then(function(res){
@@ -108,7 +110,11 @@ export default function StudentList(){
             title:'Name',
             dataIndex: 'name',
             key: 'name',
-            render: (text: any) => <a>{text}</a>
+            render: (text: any) => 
+            <Link 
+            href={`/dashboard/studentPage/${text}`}>
+                <a>{text}</a>
+            </Link>
         },
         {
             title:'Area',
@@ -185,17 +191,17 @@ export default function StudentList(){
               <Search placeholder="input search text" allowClear onSearch={onSearch} style={{ width: 200 }} />
             </Space>
             <Modal forceRender
-            title='Add student'
-            getContainer={false} 
-            visible={addModalVisible} 
-            onOk={handleAddOk} 
-            okText='Add'
-            onCancel={handleAddCancel}
+                title='Add student'
+                getContainer={false} 
+                visible={addModalVisible} 
+                onOk={handleAddOk} 
+                okText='Add'
+                onCancel={handleAddCancel}
             >
             <Form {...layout} 
-            form = {form} 
-            name = 'control-hooks' 
-            onFinish={onFinish}
+                form = {form} 
+                name = 'control-hooks' 
+                onFinish={onFinish}
         >
             <Form.Item name='name' label='Name' rules = {[{required: true}]}>
                 <Input/>

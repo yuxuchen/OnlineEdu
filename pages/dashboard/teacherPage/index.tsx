@@ -180,7 +180,7 @@ export default function TeacherList(){
               <Search placeholder="input search text" allowClear onSearch={onSearch} style={{ width: 200 }} />
             </Space>
             <Modal forceRender
-            title='Add student'
+            title='Add teacher'
             getContainer={false} 
             visible={addModalVisible} 
             onOk={handleAddOk} 
@@ -205,7 +205,7 @@ export default function TeacherList(){
                     <Option value='America'>America</Option>
                 </Select>
             </Form.Item>
-            <Form.Item name='studentType' label='Student Type' rules = {[{required: true}]}>
+            <Form.Item name='studentType' label='Teacher Type' rules = {[{required: true}]}>
                 <Select>
                     <Option value='1'>developer</Option>
                     <Option value='2'>tester</Option>
