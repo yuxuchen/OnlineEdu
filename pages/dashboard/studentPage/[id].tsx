@@ -1,28 +1,54 @@
 import React from 'react'
-import {Card, Row, Col, Avatar, Divider } from 'antd';
+import {Card, Row, Col, Avatar, Divider, Space } from 'antd';
 import LayoutDB from '../../LayoutDB'
-import { UserOutlined } from '@ant-design/icons';
+import { BoldOutlined, UserOutlined } from '@ant-design/icons';
+import { Descriptions } from 'antd'
 
+const {Meta, Grid} = Card;
+const gridStyle = {
+  width: '25%',
+  textAlign: 'center',
+};
+const avatarStyle ={
+  margin:'4px', 
+  textAlign:"center",
+}
 export default function Detail() {
   return(
     <LayoutDB>
         <Row align='top'>
-            <Col span={18} push={8}>
+          <Space align="start" size={30}>
+          <Card  style={{ width: 500, textAlign:"center"}}>
+              <Meta
+                avatar={
+                <Avatar size={50} 
+                icon={<UserOutlined />} 
+                style={{margin:'0 0 0 15px'}}
+                />
+              } 
+                style={{margin:'4px', padding:'0 45%'}}
+              />
+            <Grid>
+                <Meta
+                  title="Age"
+                  description="23"/>
+              </Grid>
+            </Card>
+
             <Card title="Default size card" extra={<a href="#">More</a>} style={{ width: 1100 }}>
-              <p>Card content</p>
-              <p>Card content</p>
-              <p>Card content</p>
+              <Grid >
+                <Meta
+                  title="Age"
+                  description="23"
+                />
+              </Grid>
+            
+              <Meta
+                title="Age"
+                description="23"
+              />
             </Card>
-            </Col>
-            <Col span={6} pull={18}>
-            <Card  style={{ width: 500 }}>
-            <Avatar size="large" icon={<UserOutlined />} />
-            <Divider/>
-              <p>Card content</p>
-              <p>Card content</p>
-              <p>Card content</p>
-            </Card>
-            </Col>
+          </Space>
           </Row>
       </LayoutDB>
   )
