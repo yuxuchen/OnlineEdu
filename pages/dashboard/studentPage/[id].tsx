@@ -86,12 +86,12 @@ export default function Detail() {
           interest:data.data.data.interest,
           description:data.data.data.description
         });
-        const tableList = data.data.data.courses?.map((data:any, index:number)=>{
+        const tableList = data.data.data.courses?.map((item:any, index:number)=>{
           return{
             id:index,
-            name:data.data.data.courses.name,
-            type:data.data.data.courses.type?.name,
-            joinTime:data.data.data.courses.courseDate
+            name:item.name,
+            type:item.type?.name,
+            joinTime:item.courseDate
           }
         })
         setTableData(tableList)
