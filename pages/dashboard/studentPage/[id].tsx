@@ -35,9 +35,6 @@ const columns = [
 
 export default function Detail() {
   const router = useRouter(); 
-  const tryThis = () =>{
-    console.log('ttt')
-  }
   const [tableData, setTableData] = useState({
     id:1,
     name:'',
@@ -68,7 +65,7 @@ export default function Detail() {
       console.log(router.query.id)
       const stuDetail = async ()=>{
         const data = await getStudent(id);
-        console.log(data);
+        console.log(data.data.data.courses);
         setStuCardData({
           name:data.data.data.name,
           email:data.data.data.email,
@@ -90,7 +87,7 @@ export default function Detail() {
           return{
             id:index,
             name:item.name,
-            type:item.type?.name,
+            type:item.type?.map((item:any, index:number) =>{return <p key={index}>{item.name}</p>}),
             joinTime:item.courseDate
           }
         })
@@ -150,7 +147,6 @@ export default function Detail() {
                   description={stuCardData.address}
                   style={{display:'grid'}}
                   />
-                  <Button onClick={tryThis}>click</Button>
             </Card>
 
 
@@ -193,7 +189,10 @@ export default function Detail() {
                    
                   <br/>
                   <br/>
-                  <Descriptions.Item contentStyle={titleStyle}>{stuCardData.description}</Descriptions.Item>
+                  <Descriptions.Item contentStyle={titleStyle}>Descriptions</Descriptions.Item>
+                  <br/>
+                  <br/>
+                  <Descriptions.Item >{stuCardData.description}</Descriptions.Item>
                   </Descriptions>
                 </TabPane>
 
