@@ -108,12 +108,11 @@ export default function StudentList(){
         },
         {
             title:'Name',
-            dataIndex: 'name',
             key: 'name',
-            render: (text: any) => 
+            render: (record:any) => 
             <Link 
-            href={`/dashboard/studentPage/${text}`}>
-                <a>{text}</a>
+            href='/dashboard/studentPage/[id]' as={`/dashboard/studentPage/${record.id}`} >
+                <a>{record.name}</a>
             </Link>
         },
         {

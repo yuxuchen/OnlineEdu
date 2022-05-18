@@ -9,15 +9,15 @@ export const getStudentList = (page: number) => {
 export const deleteStudent = (id: number) => {
     return axiosInstanceConfig({
         url: `/students/${id}`,
-        params:{Id: id},
+        params:{id: id},
         method:'delete'
     })
 }
 
-export const getStudent = (id: number) => {
+export const getStudent = (id: string) => {
     return axiosInstanceConfig({
         url: `/students/${id}`,
-        params:{Id: id},
+        params:{id: id},
         method:'get'
     })
 }
