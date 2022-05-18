@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { getStudent } from '../../../api/studentListApi';
 import {Card, Row, Col, Avatar, Divider, Space, Table, Tabs, Button } from 'antd';
@@ -17,7 +17,6 @@ const columns = [
   {
     title: 'No.',
     dataIndex: 'id',
-    key: 'no',
   },
   {
     title: 'Name',
@@ -36,6 +35,9 @@ const columns = [
 
 export default function Detail() {
   const router = useRouter(); 
+  const tryThis = () =>{
+    console.log('ttt')
+  }
   const [tableData, setTableData] = useState({
     id:1,
     name:'',
@@ -63,33 +65,33 @@ export default function Detail() {
     useEffect(()=>{
       if(router.isReady){
       const id:any = router.query.id;
-      console.log(router.query)
+      console.log(router.query.id)
       const stuDetail = async ()=>{
         const data = await getStudent(id);
         console.log(data);
         setStuCardData({
-          name:data.data.name,
-          email:data.data.email,
-          age:data.data.age,
-          phone:data.data.phone,
-          address:data.data.address,
-          education:data.data.education,
-          area:data.data.country,
-          gender:data.data.gender,
-          memberStartAt:data.data.memberStartAt,
-          memberEndAt:data.data.memberEndAt,
-          type:data.data.type.name,
-          createTime:data.data.createdAt,
-          updateTime:data.data.updatedAt,
-          interest:data.data.interest,
-          description:data.data.description
+          name:data.data.data.name,
+          email:data.data.data.email,
+          age:data.data.data.age,
+          phone:data.data.data.phone,
+          address:data.data.data.address,
+          education:data.data.data.education,
+          area:data.data.data.country,
+          gender:data.data.data.gender,
+          memberStartAt:data.data.data.memberStartAt,
+          memberEndAt:data.data.data.memberEndAt,
+          type:data.data.data.type?.name,
+          createTime:data.data.data.createdAt,
+          updateTime:data.data.data.updatedAt,
+          interest:data.data.data.interest,
+          description:data.data.data.description
         });
-        const tableList = data.data.courses.map((data:any, index:number)=>{
+        const tableList = data.data.data.courses?.map((data:any, index:number)=>{
           return{
             id:index,
-            name:data.data.courses.name,
-            type:data.data.courses.type?.name,
-            joinTime:data.data.courses.courseDate
+            name:data.data.data.courses.name,
+            type:data.data.data.courses.type?.name,
+            joinTime:data.data.data.courses.courseDate
           }
         })
         setTableData(tableList)
@@ -117,37 +119,38 @@ export default function Detail() {
               <Col className="gutter-row" span={12}>
                 <Meta
                   title="Name"
-                  description="23"
+                  description={stuCardData.name}
                   style={{display:'grid'}}
                   />
                </Col>
                <Col className="gutter-row" span={12}>
                 <Meta
                   title="Age"
-                  description="23"
+                  description={stuCardData.age}
                   style={{display:'grid'}}
                   />
                </Col>
                <Col className="gutter-row" span={12}>
                 <Meta
                   title="Email"
-                  description="23"
+                  description={stuCardData.email}
                   style={{display:'grid'}}
                   />
                </Col>
                <Col className="gutter-row" span={12}>
                 <Meta
                   title="Phone"
-                  description="23"
+                  description={stuCardData.phone}
                   style={{display:'grid'}}
                   />
                </Col>
                </Row>
                 <Meta
                   title="Address"
-                  description="23"
+                  description={stuCardData.address}
                   style={{display:'grid'}}
                   />
+                  <Button onClick={tryThis}>click</Button>
             </Card>
 
 
@@ -183,7 +186,7 @@ export default function Detail() {
                   <br/>
                   <br/>
                   <div>
-                    {stuCardData.interest.map((item,index)=> 
+                    {stuCardData.interest?.map((item,index)=> 
                     {return <Button key={index} 
                     style={{color:'salmon', backgroundColor: 'papayawhip', opacity: 1}}>{item}</Button>})}
                   </div>
