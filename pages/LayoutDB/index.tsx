@@ -1,28 +1,74 @@
-import React, {ReactNode} from 'react'
+import React, {ReactNode, useState} from 'react'
 import Link from 'next/link';
 import SideMenu from '../../components/layoutComponents/SideMenu'
 import TopHeader from '../../components/layoutComponents/TopHeader';
-import { Layout, Breadcrumb, AutoComplete } from 'antd';
-import StudentList from '../dashboard/studentPage';
+import { Layout, Breadcrumb } from 'antd';
 
 
 const { Content} = Layout;
 
-
-export default function DLayout({ children }: { children?: ReactNode }){
-  
-  return( 
+export default function DLayout(props:any){
+  let {children, type} = props
+  const routesStu = [
+    {
+      path: '/CMSPage',
+      breadcrumbName: 'CMS MANAGER SYSTEM',
+    },
+    {
+      path: '',
+      breadcrumbName: 'Student',
+    },
+    {
+      path: '/studentPage',
+      breadcrumbName: 'Student List',
+    },
+    {
+      path: '',
+      breadcrumbName: 'Detail',
+    },
+  ];
+  const routesTea = [
+    {
+      path: '/CMSPage',
+      breadcrumbName: 'CMS MANAGER SYSTEM',
+    },
     
+    {
+      path: '',
+      breadcrumbName: 'Teacher',
+    },
+    {
+      path: '/studentPage',
+      breadcrumbName: 'Teacher List',
+    },
+    {
+      path: '',
+      breadcrumbName: 'Detail',
+    },
+  ];
+  
+  function itemRender(route:any, params:any, routes:any, paths:any) {
+    const last = routes.indexOf(route) === routes.length - 1;
+    return last ? (
+      <span>{route.breadcrumbName}</span>
+    ) : (
+      <Link href={paths.join('/')}>{route.breadcrumbName}</Link>
+    );
+  }
+  
+  let navigate = (type === 'student' ? 
+   
+    <Breadcrumb style={{ margin: "16px 0" }} itemRender={itemRender} routes={routesStu} />
+    : 
+   <Breadcrumb style={{ margin: "16px 0" }} itemRender={itemRender} routes={routesTea} />)
+   
+  return( 
   <Layout>
       <TopHeader/>
      <Layout>
         <SideMenu/>
         <Layout style = {{ padding: '0 24px 24px'}}>
-         <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>CMS MANAGER SYSTEM</Breadcrumb.Item>
-            <Breadcrumb.Item>Student</Breadcrumb.Item>
-            <Breadcrumb.Item>Student List</Breadcrumb.Item>
-         </Breadcrumb>
+        {navigate}
           <Content
           className="site-layout-background"
           style={{
@@ -31,12 +77,10 @@ export default function DLayout({ children }: { children?: ReactNode }){
             minHeight: 280,
             overflow:"auto",
           }}>
-              <main>{children}</main>
+            <main>{children}</main>
           </Content>
       </Layout>
     </Layout>
   </Layout>
-  
   )
-
 }

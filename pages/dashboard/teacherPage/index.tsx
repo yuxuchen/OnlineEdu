@@ -172,7 +172,7 @@ export default function TeacherList(){
     ]
     
     return (
-          <DLayout>
+          <DLayout type='teacher'>
             <Button type='primary' onClick={showAddModal}>
                 + Add
             </Button>
@@ -231,7 +231,7 @@ export default function TeacherList(){
             <Form.Item name='email' label='Email' rules = {[{required: true}]}>
                 <Input/>
             </Form.Item>
-            <Form.Item name='country' label='Area' rules = {[{required: true}]}>
+            <Form.Item name='country' label='Country' rules = {[{required: true}]}>
                 <Select>
                     <Option value="China">China</Option>
                     <Option value='Australia'>Australia</Option>

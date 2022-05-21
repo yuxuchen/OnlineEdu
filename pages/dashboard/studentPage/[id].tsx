@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { getStudent } from '../../../api/studentListApi';
-import {Card, Row, Col, Avatar, Divider, Space, Table, Tabs, Button } from 'antd';
+import { Card, Row, Col, Avatar, Divider, Space, Table, Tabs, Button } from 'antd';
 import LayoutDB from '../../LayoutDB'
 import { UserOutlined } from '@ant-design/icons';
 import { Descriptions } from 'antd'
@@ -24,14 +24,13 @@ const columns = [
   },
   {
     title: 'Type',
-    dataIndex: 'type.name',
+    dataIndex: 'type',
   },
   {
     title: 'Join Time',
-    dataIndex: 'courseDate',
+    dataIndex: 'joinTime',
   },
 ];
-
 
 export default function Detail() {
   const router = useRouter(); 
@@ -149,7 +148,6 @@ export default function Detail() {
                   />
             </Card>
 
-
             <Card  style={{ width: 1100 }}>
               <Tabs defaultActiveKey="1">
                 <TabPane tab="About" key="1">
@@ -157,29 +155,21 @@ export default function Detail() {
                 <Descriptions.Item contentStyle={titleStyle}>Information</Descriptions.Item>
                   <br/>
                   <br/>
-                  <Descriptions.Item label="Education" >{stuCardData.education}</Descriptions.Item>
+                  <Descriptions.Item label="Education" span={2}>{stuCardData.education}</Descriptions.Item>
                   <br/>
+                  <Descriptions.Item label="Area" span={2}>{stuCardData.area}</Descriptions.Item>
                   <br/>
-                  <Descriptions.Item label="Area">{stuCardData.area}</Descriptions.Item>
+                  <Descriptions.Item label="Gender" span={2}>{stuCardData.gender}</Descriptions.Item>
                   <br/>
+                  <Descriptions.Item label="Member Period" span={2}>{stuCardData.memberStartAt}——{stuCardData.memberEndAt}</Descriptions.Item>
                   <br/>
-                  <Descriptions.Item label="Gender">{stuCardData.gender}</Descriptions.Item>
+                  <Descriptions.Item label="Type" span={2}>{stuCardData.type}</Descriptions.Item>
                   <br/>
+                  <Descriptions.Item label="Create Time" span={2}>{stuCardData.createTime}</Descriptions.Item>
                   <br/>
-                  <Descriptions.Item label="Member Period">{stuCardData.memberStartAt}-{stuCardData.memberEndAt}</Descriptions.Item>
+                  <Descriptions.Item label="Update Time" span={2}>{stuCardData.updateTime}</Descriptions.Item>
                   <br/>
-                  <br/>
-                  <Descriptions.Item label="Type">{stuCardData.type}</Descriptions.Item>
-                  <br/>
-                  <br/>
-                  <Descriptions.Item label="Create Time">{stuCardData.createTime}</Descriptions.Item>
-                  <br/>
-                  <br/>
-                  <Descriptions.Item label="Update Time">{stuCardData.updateTime}</Descriptions.Item>
-                  <br/>
-                  <br/>
-                <Descriptions.Item contentStyle={titleStyle}>Interesting</Descriptions.Item>
-                  <br/>
+                <Descriptions.Item contentStyle={titleStyle} span={2}>Interesting</Descriptions.Item>
                   <br/>
                   <div>
                     {stuCardData.interest?.map((item,index)=> 
@@ -189,8 +179,7 @@ export default function Detail() {
                    
                   <br/>
                   <br/>
-                  <Descriptions.Item contentStyle={titleStyle}>Descriptions</Descriptions.Item>
-                  <br/>
+                  <Descriptions.Item contentStyle={titleStyle} span={2}>Descriptions</Descriptions.Item>
                   <br/>
                   <Descriptions.Item >{stuCardData.description}</Descriptions.Item>
                   </Descriptions>

@@ -182,7 +182,7 @@ export default function StudentList(){
     ]
     
     return (
-          <DLayout>
+          <DLayout type='student'>
             <Button type='primary' onClick={showAddModal}>
                 + Add
             </Button>

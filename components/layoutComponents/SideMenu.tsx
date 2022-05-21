@@ -26,22 +26,22 @@ export default function SideMenu() {
         theme="dark"
         mode="inline"
         defaultSelectedKeys={['1']}>
-          <Menu.Item key='/' icon={<DashboardOutlined />}>
-            Overview
+          <Menu.Item key='1' icon={<DashboardOutlined />}>
+          <Link href={{pathname:"../dashboard/CMSPage"}}>Overview</Link>
           </Menu.Item>
         <SubMenu key='/dashboard/studentPage' icon={<UserOutlined />} title='Student'>
             <Menu.Item key='2' icon={<TeamOutlined />}>
-            <Link href={{pathname:"../dashboard/studentPage"}}>Student List</Link>
+            <Link href={{pathname:"/dashboard/studentPage"}}>Student List</Link>
             </Menu.Item>
         </SubMenu>
         <SubMenu key='/dashboard/teacherPage' icon={<DeploymentUnitOutlined />} title='Teacher'>
           <Menu.Item key='3' icon={<TeamOutlined />}>
-          <Link href={{pathname:"../dashboard/teacherPage"}}>Teacher List</Link>
+          <Link href={{pathname:"/dashboard/teacherPage"}}>Teacher List</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu key='/dashboard/coursePage' icon={<ReadOutlined />} title='Course'>
           <Menu.Item key='4' icon={<DeploymentUnitOutlined />}>
-            <Link href={{pathname:"../teacherPage"}}>Course</Link>
+            <Link href={{pathname:"/coursePage"}}>Course</Link>
           </Menu.Item>
         </SubMenu>
         <Menu.Item key='/dashboard/message' icon={<DashboardOutlined />}>
