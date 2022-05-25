@@ -1,6 +1,8 @@
-import { Table, Space, Button, Popconfirm, message, Modal, Form, Select, Input, Search } from 'antd'
+import { Table, Space, Button, Popconfirm, message, Modal, Form, Select, Input, Search, Slider } from 'antd'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import React, {useState} from 'react';
 import { useEffect } from 'react';
+import Link from 'next/link';
 import {formatDistanceToNow, fromUnixTime} from 'date-fns';
 import DLayout from '../../LayoutDB';
 import {getTeacherList, deleteTeacher, addTeacher, editTeacher} from '../../../api/teacherListApi'
@@ -14,7 +16,7 @@ export default function TeacherList(){
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [form] = Form.useForm();
     const {Search} = Input;
-    const onSearch = value => console.log(value);
+    const onSearch = (value:any) => console.log(value);
     
      useEffect(() => {
         getTeacherList(1).then(function(res){
@@ -49,6 +51,13 @@ export default function TeacherList(){
         }).catch((err)=>{
             console.log(err);
         })
+    }
+    function onChange(value: any) {
+        console.log('onChange: ', value);
+    }
+      
+    function onAfterChange(value: any) {
+        console.log('onAfterChange: ', value);
     }
     const handleEditCancel = ()=>{
         setEditModalVisible(false);
@@ -99,6 +108,15 @@ export default function TeacherList(){
         message.success('Added');
     }
 
+    const prefixSelector = (
+        <Form.Item name="prefix" noStyle>
+          <Select style={{ width: 70 }}>
+            <Option value="86">+86</Option>
+            <Option value="87">+87</Option>
+          </Select>
+        </Form.Item>
+      );
+
     const columns =[
         {
             title:'No.',
@@ -107,9 +125,11 @@ export default function TeacherList(){
         },
         {
             title:'Name',
-            dataIndex: 'name',
             key: 'name',
-            render: (text: any) => <a>{text}</a>
+            render: (record: any) => 
+            <Link as={`/dashboard/teacherPage/${record.id}`} href='/dashboard/teacherPage/[id]'>
+                <a>{record.name}</a>
+            </Link>
         },
         {
             title:'Area',
@@ -195,9 +215,6 @@ export default function TeacherList(){
             <Form.Item name='name' label='Name' rules = {[{required: true}]}>
                 <Input/>
             </Form.Item>
-            <Form.Item name='email' label='Email' rules = {[{required: true}]}>
-                <Input/>
-            </Form.Item>
             <Form.Item name='country' label='Area' rules = {[{required: true}]}>
                 <Select>
                     <Option value="China">China</Option>
@@ -205,12 +222,20 @@ export default function TeacherList(){
                     <Option value='America'>America</Option>
                 </Select>
             </Form.Item>
-            <Form.Item name='studentType' label='Teacher Type' rules = {[{required: true}]}>
-                <Select>
-                    <Option value='1'>developer</Option>
-                    <Option value='2'>tester</Option>
-                </Select>
+            <Form.Item name='email' label='Email' rules = {[{required: true}]}>
+                <Input/>
             </Form.Item>
+            <Form.Item name='skills' label='Skills' rules = {[{required: true}]}>
+                <Input/>
+            </Form.Item>
+            <Form.Item
+                name="phone"
+                label="Phone"
+                rules={[{ required: true, message: 'Please input your phone number!' }]}
+            >
+        <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
+      </Form.Item>
+            
         </Form>
             </Modal>
             <Modal title='Edit teacher' 
@@ -220,11 +245,11 @@ export default function TeacherList(){
                   okText='Update'
                   mask={false}
                   >
-                <Form {...layout} 
+            <Form {...layout} 
             form = {form} 
             name = 'control-hooks' 
             onFinish={onFinish}
-        >
+            >
             <Form.Item name='name' label='Name' rules = {[{required: true}]}>
                 <Input/>
             </Form.Item>
@@ -238,13 +263,44 @@ export default function TeacherList(){
                     <Option value='America'>America</Option>
                 </Select>
             </Form.Item>
-            <Form.Item name='studentType' label='Student Type' rules = {[{required: true}]}>
-                <Select>
-                    <Option value='1'>developer</Option>
-                    <Option value='2'>tester</Option>
-                </Select>
-            </Form.Item>
+            <Form.Item
+                name="phone"
+                label="Phone"
+                rules={[{ required: true, message: 'Please input your phone number!' }]}
+            >
+        <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
+      </Form.Item>
         </Form>
+
+        <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
+      <Form.List name="users">
+        {(fields, { add, remove }) => (
+          <>
+            {fields.map(({ key, name, ...restField }) => (
+              <Space key={key} style={{ display: 'flex', marginBottom: 8 }} size={20} align="baseline">
+                <Form.Item
+                  {...restField}
+                  name={[name, 'skills']}
+                  rules={[{ required: true, message: 'Skills' }]}
+                >
+                  <Input placeholder="Skills" />
+                </Form.Item>
+                <Form.Item
+                >
+                  <Slider style={{width:220}}  onChange={onChange} onAfterChange={onAfterChange} min={1} max={5} />
+                </Form.Item>
+                <MinusCircleOutlined onClick={() => remove(name)} />
+              </Space>
+            ))}
+            <Form.Item>
+              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                Add skills
+              </Button>
+            </Form.Item>
+          </>
+        )}
+      </Form.List>
+    </Form>
             </Modal>
            <Table 
         columns={columns} 

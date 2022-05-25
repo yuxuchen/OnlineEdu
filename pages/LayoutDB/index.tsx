@@ -11,7 +11,7 @@ export default function DLayout(props:any){
   let {children, type} = props
   const routesStu = [
     {
-      path: '/CMSPage',
+      path: '/dashboard/CMSPage',
       breadcrumbName: 'CMS MANAGER SYSTEM',
     },
     {
@@ -19,7 +19,7 @@ export default function DLayout(props:any){
       breadcrumbName: 'Student',
     },
     {
-      path: '/studentPage',
+      path: '/dashboard/studentPage',
       breadcrumbName: 'Student List',
     },
     {
@@ -29,7 +29,7 @@ export default function DLayout(props:any){
   ];
   const routesTea = [
     {
-      path: '/CMSPage',
+      path: '/dashboard/CMSPage',
       breadcrumbName: 'CMS MANAGER SYSTEM',
     },
     
@@ -38,7 +38,7 @@ export default function DLayout(props:any){
       breadcrumbName: 'Teacher',
     },
     {
-      path: '/studentPage',
+      path: '/dashboard/teacherPage',
       breadcrumbName: 'Teacher List',
     },
     {
@@ -52,7 +52,7 @@ export default function DLayout(props:any){
     return last ? (
       <span>{route.breadcrumbName}</span>
     ) : (
-      <Link href={paths.join('/')}>{route.breadcrumbName}</Link>
+      <Link href={route.path}>{route.breadcrumbName}</Link>
     );
   }
   

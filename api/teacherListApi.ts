@@ -31,7 +31,7 @@ export const addTeacher =(name: string, country: string, phone: string, skills:[
             name: name,
             country: country,
             phone: phone,
-            skills: skills,
+            skills: [skills],
             email: email,
         },
         
@@ -46,7 +46,7 @@ export const editTeacher =(name: string, country: string, phone: string, skills:
             name: name,
             country: country,
             phone: phone,
-            skills: skills,
+            skills: [skills],
             email: email,
         },
     })

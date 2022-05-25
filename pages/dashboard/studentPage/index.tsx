@@ -176,7 +176,6 @@ export default function StudentList(){
                     <Button type='primary' danger>Delete</Button>
                   </Popconfirm>
                 </Space>
-                
             )
         },
     ]
@@ -234,7 +233,8 @@ export default function StudentList(){
             form = {form} 
             name = 'control-hooks' 
             onFinish={onFinish}
-        >
+            
+            >
             <Form.Item name='name' label='Name' rules = {[{required: true}]}>
                 <Input/>
             </Form.Item>

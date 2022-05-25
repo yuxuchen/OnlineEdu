@@ -97,7 +97,7 @@ export default function Detail() {
     },[router.isReady])
 
   return(
-    <LayoutDB>
+    <LayoutDB type='student'>
         <Row align='top'>
           <Space align="start" size={30}>
           <Card  style={{ width: 500, textAlign:"center"}} bordered={true}>

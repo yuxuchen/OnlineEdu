@@ -49,7 +49,6 @@ export default function TopHeader() {
            <Dropdown overlay={menu}>
               <Avatar size={35} icon={<UserOutlined />} />
            </Dropdown>
-            
             </div>
       </Header>
   )
