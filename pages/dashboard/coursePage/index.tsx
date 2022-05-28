@@ -3,8 +3,9 @@ import DLayout from '../../LayoutDB'
 import { Card, Avatar, Button, List, Skeleton, Divider, Image, Row, Col } from 'antd';
 import { getCourseList } from '../../../api/courseListApi';
 import { useEffect } from 'react';
+import Link from 'next/link';
 import { HeartTwoTone } from '@ant-design/icons';
-import Router from 'next/router';
+
 
 interface DataType {
     name?: '';
@@ -15,7 +16,7 @@ interface DataType {
     maxStudents?:'';
     loading: boolean;
   }
-const { Meta } = Card;
+
 const count=16;
 
 export default function AllCourses() {
@@ -125,15 +126,14 @@ export default function AllCourses() {
                       <p>{item.maxStudents}</p>
                   </Col>
                 </Row>
-                <Button type='primary' href='/dashboard/coursePage/[id]'>
-                    Read More
-                </Button>
+                <Link href='/dashboard/coursePage/[id]' as={`/dashboard/coursePage/${item.id}`} >
+                  <Button type='primary' style={{textAlign:'center'}}>Read More</Button>
+                </Link>
                     </Card>
                     </Skeleton>
               </List.Item>
           )}
           >
-          
           </List>
     </DLayout>
     

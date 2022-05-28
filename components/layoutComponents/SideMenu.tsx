@@ -41,7 +41,7 @@ export default function SideMenu() {
         </SubMenu>
         <SubMenu key='/dashboard/coursePage' icon={<ReadOutlined />} title='Course'>
           <Menu.Item key='4' icon={<DeploymentUnitOutlined />}>
-            <Link href={{pathname:"/dashboard/coursePage/AllCourses"}}>All Course</Link>
+            <Link href={{pathname:"/dashboard/coursePage"}}>All Course</Link>
           </Menu.Item>
           <Menu.Item key='5' icon={<DeploymentUnitOutlined />}>
             <Link href={{pathname:"/dashboard/coursePage/AddCourses"}}>Add Course</Link>

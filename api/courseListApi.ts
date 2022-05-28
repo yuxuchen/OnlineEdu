@@ -16,13 +16,13 @@ export const deleteCourse = (id: number) => {
 
 export const getDetail = (id: number) => {
     return axiosInstanceConfig({
-        url: `/courses/detail?id=${id}`,
+        url: `/courses/detail?`,
         params:{id: id},
         method:'get'
     })
 }
 
-export const addStudent =(name: string, country: string, email: string, studentType: number) => {
+export const addCourse =(name: string, country: string, email: string, studentType: number) => {
     return axiosInstanceConfig({
         url:'/students',
         method:'put',
