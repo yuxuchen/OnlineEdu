@@ -2,12 +2,21 @@ import React, {useState } from 'react'
 import DLayout from '../../LayoutDB'
 import { useRouter } from 'next/router'
 import {getDetail} from '../../../api/courseListApi';
-import { Card, Avatar, Button, List, Skeleton, Divider, Image, Row, Col, Space, Descriptions, Steps, Table} from 'antd';
-import { getCourseList } from '../../../api/courseListApi';
+import { Card, Avatar, Button, Image, Row, Col, Space, Descriptions, Steps, Table, Collapse, Select} from 'antd';
+import type { ExpandIconPosition } from 'antd/lib/collapse/Collapse';
 import { useEffect } from 'react';
 import { HeartTwoTone } from '@ant-design/icons';
 
-const topBorderStyle = {
+interface topBorderStyle {
+  borderStyle:string, 
+  borderBottom:number, 
+  borderColor:string, 
+  borderWidth:string,
+  color:string, 
+  textAlign:'center', 
+  fontWeight:string,
+}
+const topBorderStyle: topBorderStyle = {
   borderStyle:'solid', 
   borderBottom:0, 
   borderColor:'#D3D3D3', 
@@ -16,7 +25,16 @@ const topBorderStyle = {
   textAlign:'center', 
   fontWeight:'bold',
 }
-const bottomBorder = {
+interface bottomBorder {
+  borderStyle:string, 
+  borderColor:string, 
+  borderWidth:string, 
+  borderTop:number,
+  color:string, 
+  textAlign:'center', 
+  fontWeight:string
+}
+const bottomBorder: bottomBorder = {
   borderStyle:'solid', 
   borderColor:'#D3D3D3', 
   borderWidth:'1px', 
@@ -29,10 +47,14 @@ const titleStyle= {
   fontSize:'30px',
   color:'#6a5acd',
 }
-const { Step } = Steps
+const { Step } = Steps;
+const { Panel } = Collapse;
+const { Option } = Select;
 
 export default function CourseDetailLists() {
   const router = useRouter();
+  const [tableTime, setTableTime] = 
+  useState(['']);
   const [courseCard, setCourseCard] = 
   useState({
               name:'',
@@ -113,11 +135,38 @@ export default function CourseDetailLists() {
               console.log(res.data.data);
                 setCourseCard(res.data.data);
                 setCourseDetail(res.data.data);
+                let len = res.data.data.schedule.classTime?.length;
+                let arr = new Array(0);
+                let map = new Map();
+                for( let i =0; i<len; i++){
+                 let weekDay = res.data.data.schedule.classTime[i].split(' ')[0];
+                 let time = res.data.data.schedule.classTime[i].split(' ')[1];
+                 map.set(weekDay, time);
+                }
+                arr.push(Object.fromEntries(map.entries()));
+               setTableTime(arr)
             }
         )
         }
     },[router.isReady]
     )
+
+  const [expandIconPosition, setExpandIconPosition] = useState<ExpandIconPosition>('left');
+  const onPositionChange = (newExpandIconPosition: ExpandIconPosition) => {
+    setExpandIconPosition(newExpandIconPosition);
+  };
+  const onChange = (key: string | string[]) => {
+    console.log(key);
+  };
+  const genExtra = () => (
+    <Button
+      onClick={event => {
+        // If you don't want click extra trigger collapse, you can prevent this:
+        event.stopPropagation();
+      }}
+    />
+  );
+
   return (
     <DLayout>
       <Row align='top'>
@@ -174,24 +223,15 @@ export default function CourseDetailLists() {
                       <p>{courseCard.sales.price}</p>
                   </Col>
                   <Col span={6} 
-                  style={{
-                    borderStyle:'solid', borderColor:'#D3D3D3', borderWidth:'1px', borderBottom:0,
-                    color:'#6a5acd', textAlign:'center', 
-                    fontWeight:'bold'}}>
+                  style={topBorderStyle}>
                       <p>{courseCard.sales.batches}</p>
                   </Col>
                   <Col span={6}
-                  style={{
-                    borderStyle:'solid', borderColor:'#D3D3D3', borderWidth:'1px', borderBottom:0,
-                    color:'#6a5acd', textAlign:'center', 
-                    fontWeight:'bold'}}>
+                  style={topBorderStyle}>
                       <p>{courseCard.sales.studentAmount}</p>
                   </Col>
                   <Col span={6} 
-                  style={{
-                    borderStyle:'solid', borderColor:'#D3D3D3', borderWidth:'1px', borderBottom:0,
-                    color:'#6a5acd', textAlign:'center', 
-                    fontWeight:'bold'}}>
+                  style={topBorderStyle}>
                       <p>{courseCard.sales.earnings}</p>
                   </Col>
                 </Row>
@@ -201,24 +241,15 @@ export default function CourseDetailLists() {
                       <p>Pice</p>
                   </Col>
                   <Col span={6} 
-                  style={{
-                    borderStyle:'solid', borderColor:'#D3D3D3', borderWidth:'1px', borderTop:0,
-                    color:'#939393', textAlign:'center', 
-                    fontWeight:'bold'}}>
+                  style={bottomBorder}>
                       <p>Batches</p>
                   </Col>
                   <Col span={6}
-                  style={{
-                    borderStyle:'solid', borderColor:'#D3D3D3', borderWidth:'1px', borderTop:0,
-                    color:'#939393', textAlign:'center', 
-                    fontWeight:'bold'}}>
+                  style={bottomBorder}>
                       <p>Students</p>
                   </Col>
                   <Col span={6} 
-                  style={{
-                    borderStyle:'solid', borderColor:'#D3D3D3', borderWidth:'1px', borderTop:0,
-                    color:'#939393', textAlign:'center', 
-                    fontWeight:'bold'}}>
+                  style={bottomBorder}>
                       <p>Earnings</p>
                   </Col>
                 </Row>
@@ -255,16 +286,10 @@ export default function CourseDetailLists() {
                   <br/>
                   <Descriptions.Item span={2}>{courseDetail.uid}</Descriptions.Item>
                   <br/>
-                  <Descriptions.Item span={2} contentStyle={{fontWeight:'bold'}}>{courseDetail.schedule.classTime.split(',')}</Descriptions.Item>
-                  <br/>
                   <Descriptions.Item span={2} contentStyle={{fontWeight:'bold'}}>Class Time</Descriptions.Item>
                   <br/>
               </Descriptions>
-                  <Table bordered dataSource={courseDetail.schedule.classTime?.map((item:string)=>{
-                    item.split('')[0];
-                  
-                
-                  })} columns={columns}/>
+                  <Table bordered dataSource={tableTime} columns={columns}/>
                   <br/>
               <Descriptions labelStyle={{fontWeight:'bold'}}>
                   <Descriptions.Item span={2} contentStyle={{fontWeight:'bold'}}>Category</Descriptions.Item>
@@ -283,7 +308,17 @@ export default function CourseDetailLists() {
                   <Descriptions.Item span={2} contentStyle={{fontWeight:'bold'}}>Chapter</Descriptions.Item>
                   <br/>
               </Descriptions>
-              
+              <Collapse
+                defaultActiveKey={['1']}
+                onChange={onChange}
+                expandIconPosition={expandIconPosition}
+              >
+                  {courseDetail.schedule.chapters?.map((item:any, index:any) => 
+                {return <Panel header={item.name} key={index} extra={genExtra()}>
+                  <div>{item.content}</div>
+                </Panel>})}
+                
+              </Collapse>
             </Card>
           </Space>
           </Row>
