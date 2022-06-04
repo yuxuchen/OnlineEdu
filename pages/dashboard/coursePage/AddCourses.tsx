@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { Steps, Row, Col, Form, Input, Button, DatePicker, InputNumber, Upload, message, Space,Result } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
-import type { DatePickerProps, RangePickerProps, UploadProps } from 'antd/es/date-picker';
+import { Steps } from 'antd';
 import DLayout from '../../LayoutDB';
 import CourseDetail from '../../../components/courseComponents/courseDetail';
 import CourseSchedule from '../../../components/courseComponents/CourseSchedule';
 import Success from '../../../components/courseComponents/Success';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 
 export default function AddCourses() {
@@ -26,13 +23,16 @@ export default function AddCourses() {
         onChange={onChange}
         className="site-navigation-steps"
       >
-        <Step status="process" title="Course Detail" />
-        <Step status="wait" title="Course Schedule" />
-        <Step status="wait" title="Success" />
+        {current === 0 ? <Step status= "process" title="Course Detail" /> :  <Step status= "finish" title="Course Detail" />}
+        {current === 1 ? <Step status= "process" title="Course Schedule" /> :  <Step status= "wait" title="Course Schedule" />}
+        {current === 2 ? <Step status= "process" title="Success" /> :  <Step status= "wait" title="Success" />}
       </Steps>
+      <div style={{padding:'15px 0'}}>
       {current === 0 && <CourseDetail/>}
       {current === 1 && <CourseSchedule/>}
       {current === 2 && <Success/>}
+      </div>
+      
     </DLayout>
    
   )

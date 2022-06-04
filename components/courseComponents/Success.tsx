@@ -29,20 +29,17 @@ export default function Success() {
       <Col className="gutter-row" span={8}>
       <Result
     status="success"
-    title="Successfully Purchased Cloud Server ECS!"
-    subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+    title="Successfully Create Course!"
     extra={[
       <Button type="primary" key="console">
-        Go Console
+        Go Course
       </Button>,
-      <Button key="buy">Buy Again</Button>,
+      <Button key="buy">Create Again</Button>,
     ]}
   />
       </Col>
       <Col className="gutter-row" span={8}>
-       
       </Col>
-      
     </Row>
     </>
    

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Row, Col, Form, Input, Button, DatePicker, InputNumber, Upload, message } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import { Row, Col, Form, Input, Button, DatePicker, InputNumber, Upload, message, Cascader, Tooltip, } from 'antd';
+import { InboxOutlined, SearchOutlined } from '@ant-design/icons';
 import type { DatePickerProps, RangePickerProps} from 'antd/es/date-picker';
 import type { UploadProps } from 'antd';
 
+
 export default function CourseDetail() { 
   const [current, setCurrent] = useState(0);
+  const { SHOW_CHILD } = Cascader;
+  const { Search } = Input;
+  const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
   const onChange = (value: number) => {
     console.log('onChange:', value);
@@ -57,15 +61,43 @@ export default function CourseDetail() {
       console.log('Dropped files', e.dataTransfer.files);
     },
   };
-
+  interface Option {
+    value: string | number;
+    label: string;
+    children?: Option[];
+  }
+  const options: Option[] = [
+    {
+      label: 'C#',
+      value: 'c#',
+    },
+    {
+      label: 'C',
+      value: 'c',
+    },
+    {
+      label: 'C++',
+      value: 'c++',
+    },
+    {
+      label: 'JAVA',
+      value: 'java',
+    },
+    {
+      label: 'Python',
+      value: 'python',
+    },
+  ];
   return (
- <>
-      <Row gutter={16}>
-      <Col className="gutter-row" span={6}>
+    <>
+      <Row
+      >
+      <Col className="gutter-row" span={10}>
       <Form
-            name="basic"
+            form={form}
+            layout="vertical"
             labelCol={{ span: 7 }}
-            wrapperCol={{ span: 16 }}
+            wrapperCol={{ span: 32 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -76,15 +108,16 @@ export default function CourseDetail() {
               name="courseName"
               rules={[{ required: true, message: 'Please input course name!' }]}
             >
-              <Input />
+              <Input style={{ width: '100%' }}/>
             </Form.Item>
             </Form>
       </Col>
       <Col className="gutter-row" span={6}>
       <Form
-            name="basic"
-            labelCol={{ span: 5 }}
-            wrapperCol={{ span: 16 }}
+            form={form}
+            layout="vertical"
+            labelCol={{ span: 7 }}
+            wrapperCol={{ span: 21 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -95,15 +128,16 @@ export default function CourseDetail() {
               name="teacher"
               rules={[{ required: true, message: 'Please input your teacher name!' }]}
             >
-              <Input />
+              <Input style={{ width: '100%' }}/>
             </Form.Item>
             </Form>
       </Col>
       <Col className="gutter-row" span={6}>
       <Form
-            name="basic"
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 19 }}
+            form={form}
+            layout="vertical"
+            labelCol={{ span: 7 }}
+            wrapperCol={{ span: 21 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -114,15 +148,22 @@ export default function CourseDetail() {
               name="type"
               rules={[{ required: true, message: 'Please input your type!' }]}
             >
-              <Input />
-            </Form.Item>
+              <Cascader
+                style={{ width: '100%' }}
+                options={options}
+                multiple
+                maxTagCount="responsive"
+                defaultValue={['C#']}
+              />
+            </Form.Item >
             </Form>
       </Col>
       <Col className="gutter-row" span={6}>
       <Form
-            name="basic"
+            form={form}
+            layout="vertical"
             labelCol={{ span: 7 }}
-            wrapperCol={{ span: 17}}
+            wrapperCol={{ span: 21 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -133,17 +174,22 @@ export default function CourseDetail() {
               name="courseCode"
               rules={[{ required: true, message: 'Please input your course code!' }]}
             >
-              <Input />
+             <Search placeholder="input search text" style={{ width: '100%'  }} />
             </Form.Item>
             </Form>
+
+
+
+
       </Col>
       </Row>
       <Row gutter={16}>
       <Col className="gutter-row" span={8}>
             <Form
-            name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
+            form={form}
+            layout="vertical"
+            labelCol={{ span: 7 }}
+            wrapperCol={{ span: 32 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -160,23 +206,23 @@ export default function CourseDetail() {
             <Form.Item 
             label="Price"
             name="price"
-            wrapperCol={{ offset: 8, span: 16 }}>
+            wrapperCol={{ offset: 8, span: 32 }}
+            rules={[{ required: true }]}>
             <InputNumber
               defaultValue={1000}
               formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={value => value!.replace(/\$\s?|(,*)/g, '')}
               onChange={onChangePrice}
             />
             </Form.Item>
             <Form.Item label="Student Limit"
             name="studentLimit"
-            rules={[{  message: 'Please input student limit numbers!' }]}
+            rules={[{  required: true, message: 'Please input student limit numbers!' }]}
             >
               <Input/>
             </Form.Item>
             <Form.Item label="Duration"
             name="Duration"
-            rules={[{  message: 'Please input month!' }]}
+            rules={[{  required: true, message: 'Please input month!' }]}
             >
               <RangePicker
               showTime={{ format: 'HH:mm' }}
@@ -190,9 +236,10 @@ export default function CourseDetail() {
       </Col>
       <Col className="gutter-row" span={8}>
       <Form
-            name="basic"
-            labelCol={{ span: 5 }}
-            wrapperCol={{ span: 16 }}
+            form={form}
+            layout="vertical"
+            labelCol={{ span: 7 }}
+            wrapperCol={{ span: 32 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -209,9 +256,10 @@ export default function CourseDetail() {
       </Col>
       <Col className="gutter-row" span={8}>
       <Form
-            name="basic"
-            labelCol={{ span: 3 }}
-            wrapperCol={{ span: 16 }}
+            form={form}
+            layout="vertical"
+            labelCol={{ span: 7 }}
+            wrapperCol={{ span: 32 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -236,7 +284,7 @@ export default function CourseDetail() {
       </Col>
       
     </Row>
-    <Button type="primary" htmlType="submit">
+     <Button type="primary" htmlType="submit">
                 Submit
     </Button>
     </>

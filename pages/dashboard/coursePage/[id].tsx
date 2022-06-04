@@ -1,6 +1,6 @@
-import React, {useState } from 'react'
-import DLayout from '../../LayoutDB'
-import { useRouter } from 'next/router'
+import React, {useState } from 'react';
+import DLayout from '../../LayoutDB';
+import { useRouter } from 'next/router';
 import {getDetail} from '../../../api/courseListApi';
 import { Card, Avatar, Button, Image, Row, Col, Space, Descriptions, Steps, Table, Collapse, Select} from 'antd';
 import type { ExpandIconPosition } from 'antd/lib/collapse/Collapse';
@@ -49,7 +49,6 @@ const titleStyle= {
 }
 const { Step } = Steps;
 const { Panel } = Collapse;
-const { Option } = Select;
 
 export default function CourseDetailLists() {
   const router = useRouter();

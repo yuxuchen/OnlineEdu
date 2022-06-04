@@ -25,7 +25,7 @@ export default function StudentList(){
             })
         }
      ,[]);   
-    const onSearch = value => console.log(value);
+    const onSearch = (value: any) => console.log(value);
     const showAddModal = () =>{
         setAddModalVisible(true);
     }
